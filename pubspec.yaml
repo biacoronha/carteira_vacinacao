@@ -28,6 +28,9 @@ dependencies:
   provider: ^3.0.0
   google_sign_in: ^4.5.3
   flutter_signin_button: ^1.1.0
+  firebase_image: ^0.1.6
+  datetime_picker_formfield: ^1.0.0
+
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
@@ -63,6 +64,10 @@ class _SignUpPageeState extends State<SignUpPage> {
                                 email: _email,
                                 password: _password,)).user;
 
+                        CollectionReference users = Firestore.instance.collection('users');
+                        Map<String, dynamic> data = {'email': _email};
+                        await users.add(data);
+                        
                         Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => LoginPage()),
@@ -94,4 +99,5 @@ class _SignUpPageeState extends State<SignUpPage> {
       context: context,
     );
   }
+
 }
