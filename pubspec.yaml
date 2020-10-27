@@ -30,6 +30,7 @@ dependencies:
   flutter_signin_button: ^1.1.0
   firebase_image: ^0.1.6
   datetime_picker_formfield: ^1.0.0
+  image_picker: ^0.6.6+5
 
 
 dev_dependencies:

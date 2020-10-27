@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:carteira_vacinacao/Controllers/imageController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/date_picker.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 class RegisterDogsPage extends StatefulWidget {
   @override
@@ -7,6 +12,7 @@ class RegisterDogsPage extends StatefulWidget {
 }
 
 class _RegisterDogsPageState extends State<RegisterDogsPage> {
+  // static ImageController imageController = new ImageController();
   final _formKey = GlobalKey<FormState>();
   String _name;
   String _raca;
@@ -15,6 +21,7 @@ class _RegisterDogsPageState extends State<RegisterDogsPage> {
   String _data_nascimento;
   int _sexo;
   bool _castrado;
+  File _image ;
 
   @override
   Widget build(BuildContext context) {
@@ -27,21 +34,32 @@ class _RegisterDogsPageState extends State<RegisterDogsPage> {
             child: Form(
                 key: _formKey,
                 child: Column(children: <Widget>[
-                  // new Container(
-                  //   width: 190.0,
-                  //   height: 190.0,
-                  //   decoration: new BoxDecoration(
-                  //       shape: BoxShape.circle,
-                  //       image: new DecorationImage(
-                  //           fit: BoxFit.fill,
-                  //           image: AssetImage('assets/images/dog.png')
-                  //       )
-                  //   )), aqui vai ser pra escolher a foto 
+                  new GestureDetector(
+                    onTap: () {
+                      showPicker(context);
+                    },
+                    child: _image != null
+                    ? new CircleAvatar(
+                      backgroundImage: FileImage(_image),
+                      radius: 55,
+                    )
+                    : new Container(
+                      decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(50)),
+                              width: 100,
+                              height: 100,
+                              child: Icon(
+                                Icons.camera_alt,
+                                color: Colors.grey[800],
+                              ),
+                   ));                    
+                  ),
                   SizedBox(height: 20.0),
                   TextFormField(
                       onSaved: (value) => _name = value,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(labelText: "Nome do seu cachorro")),
+                      decoration: InputDecoration(labelText: "Nome do seu cachorro*")),
                   TextFormField(
                       onSaved: (value) => _raca = value,
                       decoration: InputDecoration(labelText: "Raça")),
@@ -60,7 +78,7 @@ class _RegisterDogsPageState extends State<RegisterDogsPage> {
                         },
                         child: IgnorePointer(
                           child: new TextFormField(
-                            decoration: new InputDecoration(hintText: 'Data de nascimento '),
+                            decoration: new InputDecoration(hintText: 'Data de nascimento*'),
                             maxLength: 10,
                             // validator: validateDob,
                             onSaved: (String val) {},
@@ -108,6 +126,69 @@ class _RegisterDogsPageState extends State<RegisterDogsPage> {
     );
     if(picked != null) setState(() => _data_nascimento = picked.toString());
 }
+
+  _imgFromCamera() async
+  {
+    File image = await ImagePicker.pickImage(
+      source: ImageSource.camera, imageQuality: 50
+    );
+
+  setState(() {
+    _image = image;
+  });
+  }
+  
+  _imgFromGallery() async {
+    File image = await  ImagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 50
+    );
+    
+  setState(() {
+    _image = image;
+  });
+  }
+         
+  void showPicker(context)
+  {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Photo Library'),
+                      onTap: () {
+                        _imgFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      _imgFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+  File get image
+  {
+    return _image;
+  }
+
+  void set image(image)
+  {
+    _image = image;
+  } 
 }
 
 
