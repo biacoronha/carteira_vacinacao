@@ -53,7 +53,7 @@ class _RegisterDogsPageState extends State<RegisterDogsPage> {
                                 Icons.camera_alt,
                                 color: Colors.grey[800],
                               ),
-                   ));                    
+                   ),                 
                   ),
                   SizedBox(height: 20.0),
                   TextFormField(

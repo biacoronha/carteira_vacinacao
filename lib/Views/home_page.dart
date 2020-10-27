@@ -52,8 +52,11 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _buildBody(context),
       floatingActionButton: FloatingActionButton(
-        //onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: () { Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegisterDogsPage()),
+        );
+        },
         child: Icon(Icons.add),
       ),
 
@@ -109,9 +112,7 @@ Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
      ),
    );
  }
-
-  rotate(int i, deg) {}
-}
+ }
 
 class Record {
  final String nome;
