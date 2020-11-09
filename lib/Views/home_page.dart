@@ -103,16 +103,11 @@ Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
        child: ListTile(
          title: Text(record.nome),
          trailing: Text(record.nome.toString()),
-         onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => RegisterDogsPage())),
-                      )
-
        ),
      ),
-   );
+   ));
  }
- }
+}
 
 class Record {
  final String nome;
