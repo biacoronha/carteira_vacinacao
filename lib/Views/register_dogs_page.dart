@@ -4,6 +4,7 @@ import 'package:carteira_vacinacao/Controllers/imageController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/date_picker.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 
 class RegisterDogsPage extends StatefulWidget {
@@ -18,10 +19,12 @@ class _RegisterDogsPageState extends State<RegisterDogsPage> {
   String _raca;
   String _porte;
   String _cor;
-  String _data_nascimento;
+  DateTime _data_nascimento;
   int _sexo;
   bool _castrado;
   File _image ;
+  TextEditingController _textEditingController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +61,6 @@ class _RegisterDogsPageState extends State<RegisterDogsPage> {
                   SizedBox(height: 20.0),
                   TextFormField(
                       onSaved: (value) => _name = value,
-                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(labelText: "Nome do seu cachorro*")),
                   TextFormField(
                       onSaved: (value) => _raca = value,
@@ -72,19 +74,19 @@ class _RegisterDogsPageState extends State<RegisterDogsPage> {
                       onSaved: (value) => _cor = value,
                       decoration: InputDecoration(labelText: "Cor")),
                   SizedBox(height: 20.0),
-                      InkWell(
-                        onTap: () {
-                          _selectDate();   // Call Function that has showDatePicker()
-                        },
-                        child: IgnorePointer(
-                          child: new TextFormField(
-                            decoration: new InputDecoration(hintText: 'Data de nascimento*'),
-                            maxLength: 10,
-                            // validator: validateDob,
-                            onSaved: (String val) {},
+                      GestureDetector(
+                        onTap: () => _selectDate(),
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            controller: _textEditingController,
+                            keyboardType: TextInputType.datetime,
+                            decoration: InputDecoration(
+                              hintText: 'Data de nascimento',
+                            ),
                           ),
                         ),
                       ),
+
                   SizedBox(height: 20.0),
 
                   SizedBox(
@@ -124,7 +126,14 @@ class _RegisterDogsPageState extends State<RegisterDogsPage> {
         firstDate: new DateTime(2000),
         lastDate: new DateTime(2021)
     );
-    if(picked != null) setState(() => _data_nascimento = picked.toString());
+    if(picked != null) {
+      _data_nascimento = picked;
+      _textEditingController
+        ..text = DateFormat.yMMMd().format(_data_nascimento)
+        ..selection = TextSelection.fromPosition(TextPosition(
+            offset: _textEditingController.text.length,
+            affinity: TextAffinity.upstream));
+    }
 }
 
   _imgFromCamera() async
